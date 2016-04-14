@@ -1,0 +1,2 @@
+
+var game = new SpaceInvaders();
