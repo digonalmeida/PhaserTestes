@@ -2,15 +2,15 @@ function SpaceInvaders(){
 	this.game = null;
 	this.width = 200;
 	this.height = 250;
-	this.player = null;
-    this.enemies = [];
-    this.walls = [];
+	
 	this.init();
     
     this.scoreText = null;
     this.highScoreText = null;
+    this.score = 0;
     
 }
+
 
 SpaceInvaders.prototype.init = function(){
 	this.game = new Phaser.Game(this.width, 
@@ -18,17 +18,12 @@ SpaceInvaders.prototype.init = function(){
 								Phaser.AUTO, 
 								"PhaserInvaders",
 								{
-									preload: this.preload.bind(this),
 									create: this.create.bind(this),
-									update: this.update.bind(this),
 								} );
 }
 
 SpaceInvaders.prototype.preload = function(){
-	this.game.load.spritesheet('player', 'player.png', 16, 8);
-	this.game.load.image('shot', 'shot.png');
-    this.game.load.image('wall', 'wall.png');
-	this.game.load.atlasJSONHash('enemy', 'enemySprites.png', 'enemySprites.json');
+	
 }
 
 SpaceInvaders.prototype.addGuiText = function(x,y, text){
@@ -44,40 +39,45 @@ SpaceInvaders.prototype.addGuiText = function(x,y, text){
     t.y = Math.round(t.y);
     return t;
 }
-SpaceInvaders.prototype.create = function(){
-    var game = this.game;
+
+SpaceInvaders.prototype.addScore = function(score){
+	this.score += score;
+	if(this.score >= this.getHighScore()){
+		this.setHighScore(this.score);
+		this.highScoreText.text = this.score;
+	}
+	
+}
+SpaceInvaders.prototype.createGui = function(){
+	var game = this.game;
     this.addGuiText(0,0, "SCORE             HI-SCORE");
     this.scoreText = this.addGuiText(0,10, "0000");
-    this.highScoreText = this.addGuiText(75, 10, "0000");
+    this.highScoreText = this.addGuiText(75, 10, this.getHighScore());
     this.addGuiText(140,this.height-12, "CREDIT 04")
-    var graphics = game.add.graphics(0, this.height-10);
+    var graphics = game.add.graphics(0, this.height-12);
     graphics.lineStyle(2, 0x33FF00);
     graphics.lineTo(300,0);
-    //this.addGuiText(0,0,"SCORE    HI-SCORE");
-    
-    
-	this.player = new Player(this);
-	for(var i = 0; i < 5; i++){
-        for(var j = 0; j < 9; j++){
-            var enemy =  new Enemy(this);
-            enemy.x =(20) + (20 * j) + ( 0.7 * i);
-            enemy.y =(75) + (12 * i);
-            this.enemies.push(enemy);
-        }
-    }
-    
-    for(var i = 0; i < 4; i++){
-        var wall = this.game.add.sprite(0,0,'wall');
-        wall.x = (i * 40) + 20;
-        wall.y = this.game.height - 60;
-        wall.tint=0x00ff00;
-    }
-
+}
+SpaceInvaders.prototype.create = function(){
+	this.game.state.add('menu', new MenuState(this));
+	this.game.state.add('game', new GameplayState(this));
+	this.game.state.start('menu');
 }
 
-SpaceInvaders.prototype.update = function(){
-    for(var i = 0; i < this.enemies.length; i++){
-      //  console.log(this.enemies[i].x);
-        
-    }
+SpaceInvaders.prototype.setHighScore = function(score){
+	localStorage.setItem("highscore", score);
 }
+SpaceInvaders.prototype.getHighScore = function(score){
+	var score = localStorage.getItem("highscore");
+	if(score == null){
+		score = 0;
+	}
+	try{
+		score = parseInt(score);
+	}
+	catch(e){
+		score = 0;
+	}
+	return score;
+}
+
