@@ -6,6 +6,10 @@ function SpaceInvaders(){
     this.enemies = [];
     this.walls = [];
 	this.init();
+    
+    this.scoreText = null;
+    this.highScoreText = null;
+    
 }
 
 SpaceInvaders.prototype.init = function(){
@@ -27,7 +31,31 @@ SpaceInvaders.prototype.preload = function(){
 	this.game.load.atlasJSONHash('enemy', 'enemySprites.png', 'enemySprites.json');
 }
 
+SpaceInvaders.prototype.addGuiText = function(x,y, text){
+    var game = this.game;
+    
+    var t = this.game.add.text(x,y, text);
+    t.font = 'Arial Black';
+    t.fill = 'white'
+    t.fontSize = 9;
+    t.textAlign = 'center';
+    //t.anchor.setTo(0.5,0);
+    t.x = Math.round(t.x);
+    t.y = Math.round(t.y);
+    return t;
+}
 SpaceInvaders.prototype.create = function(){
+    var game = this.game;
+    this.addGuiText(0,0, "SCORE             HI-SCORE");
+    this.scoreText = this.addGuiText(0,10, "0000");
+    this.highScoreText = this.addGuiText(75, 10, "0000");
+    this.addGuiText(140,this.height-12, "CREDIT 04")
+    var graphics = game.add.graphics(0, this.height-10);
+    graphics.lineStyle(2, 0x33FF00);
+    graphics.lineTo(300,0);
+    //this.addGuiText(0,0,"SCORE    HI-SCORE");
+    
+    
 	this.player = new Player(this);
 	for(var i = 0; i < 5; i++){
         for(var j = 0; j < 9; j++){
