@@ -1,71 +1,74 @@
 
 function Enemy(state, enemyType){
-	this.gameState = state;
-	this.siGame = this.gameState.siGame;
-	this.game = this.siGame.game;
-	this.enemyType = enemyType;
-	Phaser.Sprite.call(this, this.game, 10, 100, 'enemy');
-	this.game.add.existing(this);
+	GameStateObject.call(this, state, 'enemy');
+    this.enablePhysics();
 
-
-	this.speed = 0.05;
-	this.game.physics.arcade.enable(this);
-	//this.body.collideWorldBounds = true;
-	this.exploded = false;
-	
-	this.animations.add("exploding", ["explosion"], 10, false, true);
-	
-
-    this.animations.add("fly", Enemy.getAnimArray(this.enemyType), 2, true);
-    
-    
-    this.animations.play("fly");
-    this.dir = 1;
+    this.enemyType = enemyType;
+    this.x = 10;
+    this.y = 100;
+	this.speed = 5;
+    this.exploded = false;
+	this.dir = 1;
     this.shotTimeout = 0.5;
-    this.shootingInterval = 0.8;
+	this.shootingInterval = 0.8;
+    
+	this.animations.add("exploding", ["explosion"], 10, false, true);
+    this.animations.add("fly", Enemy.getAnimArray(this.enemyType), 2, true);
+    this.animations.play("fly");
+    
     this.gameState.enemies.add(this);
     
+    this.body.velocity.x = this.speed * this.dir;
 }
+GameStateObject.extend(Enemy);
 
-Enemy.prototype = Object.create(Phaser.Sprite.prototype);
-Enemy.prototype.constructor = Enemy;
 Enemy.EnemyType = {
 	SQUID:0,
 	BIRD:1,
 	SQUID2:2,
 	SPACESHIP:3
 }
-Enemy.prototype.update = function(){
-	if(!this.alive){
-		return;
-	}
+
+Enemy.prototype.updateShot = function(){
     this.shotTimeout -= this.game.time.physicsElapsed;
+    
     if(this.shotTimeout < 0){
         if(Math.random() < 0.08){
             this.shoot();
         }
+        
         this.shotTimeout = this.shootingInterval;
     }
-	//this.x =0;
-    //this.y = 0;
-   // console.log("%o", this);
+}
+
+Enemy.prototype.update = function(){
+    
+	if(!this.alive){
+		return;
+	}
+    
+    this.updateShot();
+
 	if(this.x >= this.game.width - this.width){
-		this.changeDirection(-1);
+        if(this.dir == 1){
+		  this.setGroupDirection(-1);
+        }
 	}
 
 	if(this.x <= 0){
-		this.changeDirection(1);
+        if(this.dir == -1){
+		  this.setGroupDirection(1);
+        }
     }
-    
 	
-	this.x += (this.speed * this.dir);
+	//this.x += (this.speed * this.dir);
 
 	if(this.game.input.keyboard.isDown(Phaser.Keyboard.K)){
 		this.explode();
-       
 	}
 }
-Enemy.prototype.changeDirection = function(dir){
+
+Enemy.prototype.setGroupDirection = function(dir){
 
     this.gameState.enemies.y += 5;
     
@@ -73,7 +76,8 @@ Enemy.prototype.changeDirection = function(dir){
         var enemy = this.gameState.enemies.children[i];
         enemy.dir = dir;
         enemy.animations.currentAnim.speed += 0.5;
-        enemy.speed += 0.03;
+        enemy.speed += 1;
+        enemy.body.velocity.x = enemy.speed * enemy.dir;
     }
 }
 
@@ -87,7 +91,7 @@ Enemy.prototype.explode = function(){
 
 Enemy.prototype.shoot = function(){
     var shot = new Shot(this.gameState, 'enemyShot');
-    shot.x = this.x;
+    shot.x = this.x + (this.width /2);
     shot.y = this.y;
     shot.body.velocity.y = 100;
     this.gameState.enemyShots.add(shot);
@@ -124,11 +128,10 @@ Enemy.getHitScore = function(enemyType){
 			break;
 	}
 }
+
 Enemy.prototype.hit = function(shot){
-	console.log('teste');
 	this.explode();
 	shot.kill();
 	
 	this.siGame.addScore(Enemy.getHitScore(this.enemyType));
-	//this.kill();
 }

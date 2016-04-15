@@ -7,11 +7,10 @@ function GameplayState(siGame){
     this.walls = null;
     this.playerShots = null;
     this.enemyShots = null;
-    this.lifes = 3;
+    this.lifes = 0;
     this.lifeSprites = [];
-    this.invencibleTimeout = 1;
+    this.invencibleTimeout = 0;
     this.respawnTimeout = -1;
-    
 }
 GameplayState.prototype.preload = function(){
 	this.game.load.spritesheet('player', 'player.png', 16, 8);
@@ -41,32 +40,30 @@ GameplayState.prototype.gameOver = function(){
     this.game.add.tween(t).to( { alpha: 1}, 2000, Phaser.Easing.Linear.None, true);
 }
 
-GameplayState.prototype.create = function(){
-	this.lifes = 3;
-    this.lifeSprites = [];
-    this.invencibleTimeout = 1;
-    this.respawnTimeout = -1;
-	
-	
-	var lifesLabel = this.siGame.addGuiText(0, this.game.height - 12, "LIFES");
+GameplayState.prototype.createGui = function(){
+    var game = this.game;
+    var siGame = this.siGame;
+    
+    var lifesLabel = siGame.addGuiText(0, game.height - 12, "LIFES");
 	lifesLabel.anchor.setTo(0,0);
+    
 	for(var i = 0; i < this.lifes; i++){
-		var lifeSprite = this.game.add.sprite(30 + (16 *i), this.game.height - 2, 'player');
+        var x = 30 + (16 * i);
+        var y = game.height - 2);
+		var lifeSprite = game.add.sprite(x, y, 'player');
 		lifeSprite.tint = "0x00ff00";
 		lifeSprite.anchor.setTo(0,1);
 		this.lifeSprites.push(lifeSprite);
 	}
 	
+    siGame.createGui();
+}
+
+GameplayState.prototype.createEnemies = function(){
     var game = this.game;
-    this.siGame.createGui();
+    var siGame = this.siGame;
     
-    this.enemies = game.add.group();
-    this.playerShots = game.add.group();
-    this.enemyShots = game.add.group();
-    this.walls = game.add.group();
-    
-	this.player = new Player(this);
-	for(var i = 0; i < 5; i++){
+    for(var i = 0; i < 5; i++){
 		var enemyType = 0;
 		switch(i){
 			case 0:
@@ -87,14 +84,41 @@ GameplayState.prototype.create = function(){
         }
     }
     
+}
+
+GameplayState.prototype.createWalls = function(){
+    var game = this.game;
+    var siGame = this.siGame;
+    
     for(var i = 0; i < 4; i++){
-        var wall = this.game.add.sprite(0,0,'wall');
+        var wall = game.add.sprite(0,0,'wall');
         wall.x = (i * 45) + 25;
-        wall.y = this.game.height - 60;
+        wall.y = game.height - 60;
         wall.tint=0x00ff00;
-        this.game.physics.arcade.enable(wall);
+        game.physics.arcade.enable(wall);
         this.walls.add(wall);
     }
+}
+
+GameplayState.prototype.create = function(){
+    var game = this.game;
+    var siGame = this.siGame;
+    
+	this.lifes = 3;
+    this.lifeSprites = [];
+    this.invencibleTimeout = 1;
+    this.respawnTimeout = -1;
+    
+    this.enemies = game.add.group();
+    this.playerShots = game.add.group();
+    this.enemyShots = game.add.group();
+    this.walls = game.add.group();
+    
+	this.player = new Player(this);
+    this.createGui();
+    
+    this.createEnemies();
+    this.createWalls();
 }
 
 GameplayState.prototype.hitEnemy = function(enemy, bullet){
