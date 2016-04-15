@@ -8,7 +8,7 @@ function Enemy(state, enemyType){
 	this.game.add.existing(this);
 
 
-	this.speed = 0.08;
+	this.speed = 0.05;
 	this.game.physics.arcade.enable(this);
 	//this.body.collideWorldBounds = true;
 	this.exploded = false;
@@ -21,7 +21,8 @@ function Enemy(state, enemyType){
     
     this.animations.play("fly");
     this.dir = 1;
-    this.shotTimeout = 1;
+    this.shotTimeout = 0.5;
+    this.shootingInterval = 0.8;
     this.gameState.enemies.add(this);
     
 }
@@ -43,7 +44,7 @@ Enemy.prototype.update = function(){
         if(Math.random() < 0.08){
             this.shoot();
         }
-        this.shotTimeout = 1;
+        this.shotTimeout = this.shootingInterval;
     }
 	//this.x =0;
     //this.y = 0;
@@ -55,6 +56,7 @@ Enemy.prototype.update = function(){
 	if(this.x <= 0){
 		this.changeDirection(1);
     }
+    
 	
 	this.x += (this.speed * this.dir);
 
@@ -64,10 +66,12 @@ Enemy.prototype.update = function(){
 	}
 }
 Enemy.prototype.changeDirection = function(dir){
+
+    this.gameState.enemies.y += 5;
+    
     for(var i = 0; i < this.gameState.enemies.children.length; i++){
         var enemy = this.gameState.enemies.children[i];
         enemy.dir = dir;
-        enemy.y += 5;
         enemy.animations.currentAnim.speed += 0.5;
         enemy.speed += 0.03;
     }

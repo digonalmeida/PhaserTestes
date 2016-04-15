@@ -32,7 +32,13 @@ GameplayState.prototype.removeLife = function(){
 }
 
 GameplayState.prototype.gameOver = function(){
-	this.game.state.start("menu");
+    this.game.time.events.add(Phaser.Timer.SECOND * 4, function(){
+     this.game.state.start("menu");   
+    }.bind(this), this);
+    var t = this.siGame.addGuiText(this.game.width/2, 50, "Game Over");
+    t.alpha = 0;
+    t.anchor.setTo(0.5,1);
+    this.game.add.tween(t).to( { alpha: 1}, 2000, Phaser.Easing.Linear.None, true);
 }
 
 GameplayState.prototype.create = function(){
@@ -74,16 +80,16 @@ GameplayState.prototype.create = function(){
 				enemyType = Enemy.EnemyType.SQUID;
 				break;
 		}
-        for(var j = 0; j < 9; j++){
+        for(var j = 0; j < 11; j++){
             var enemy =  new Enemy(this, enemyType);
-            enemy.x =(20) + (20 * j) + ( 0.7 * i);
+            enemy.x =(0) + (16 * j) + ( 0.7 * i);
             enemy.y =(75) + (12 * i);
         }
     }
     
     for(var i = 0; i < 4; i++){
         var wall = this.game.add.sprite(0,0,'wall');
-        wall.x = (i * 40) + 20;
+        wall.x = (i * 45) + 25;
         wall.y = this.game.height - 60;
         wall.tint=0x00ff00;
         this.game.physics.arcade.enable(wall);

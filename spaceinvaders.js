@@ -1,6 +1,6 @@
 function SpaceInvaders(){
 	this.game = null;
-	this.width = 200;
+	this.width = 210;
 	this.height = 250;
 	
 	this.init();

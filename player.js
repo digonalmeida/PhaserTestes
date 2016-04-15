@@ -7,7 +7,7 @@ function Player(state){
 	this.game.add.existing(this);
 
 	this.x  = 0;
-	this.y = this.game.height-30;
+	this.y = this.game.height - 40;
 	this.speed = 1;
 	this.game.physics.arcade.enable(this);
 	this.body.collideWorldBounds = true;
@@ -16,7 +16,7 @@ function Player(state){
 	this.animations.add('exploding', [1, 2], 5, false);
 	this.animations.play('normal');
 	this.exploded = false;
-	this.shotInterval = 0.25;
+	this.shotInterval = 0.5;
 	this.shotTimeout = 0;
     this.tint=0x00ff00;
     
@@ -83,7 +83,7 @@ Player.prototype.shoot = function(){
 	var shot = new Shot(this.gameState, 'shot');
 	shot.x = this.x + (this.width/2);
 	shot.y = this.y;
-	shot.body.velocity.y = -600;
+	shot.body.velocity.y = -400;
 	this.shotTimeout = this.shotInterval;
 	this.gameState.playerShots.add(shot);
 }
