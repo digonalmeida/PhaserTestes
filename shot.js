@@ -1,6 +1,6 @@
 function Shot(state, spriteName){
 
-	Phaser.Sprite.call(this, spriteName);
+	GameStateObject.call(this, state, spriteName);
 
 	this.enablePhysics();
 	

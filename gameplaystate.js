@@ -1,4 +1,4 @@
-function GameplayState(siGame){
+function GameplayState(siGame) {
 	this.siGame = siGame;
 	this.game = siGame.game;
 	
@@ -11,6 +11,8 @@ function GameplayState(siGame){
     this.lifeSprites = [];
     this.invencibleTimeout = 0;
     this.respawnTimeout = -1;
+    this.isGameOver = false;
+    this.spaceship;
 }
 GameplayState.prototype.preload = function(){
 	this.game.load.spritesheet('player', 'player.png', 16, 8);
@@ -22,7 +24,7 @@ GameplayState.prototype.preload = function(){
 
 GameplayState.prototype.removeLife = function(){
 	if(this.lifes == 0){
-		this.gameOver();
+		this.gameOver(false);
 		return;
 	}
 	this.lifeSprites[this.lifes-1].kill();
@@ -30,14 +32,48 @@ GameplayState.prototype.removeLife = function(){
 	
 }
 
-GameplayState.prototype.gameOver = function(){
-    this.game.time.events.add(Phaser.Timer.SECOND * 4, function(){
+GameplayState.prototype.gameOver = function(victory){
+    if(this.isGameOver)
+    {
+        return;
+    }
+    this.isGameOver = true;
+    //this.walls.kill();
+    this.game.time.events.add(Phaser.Timer.SECOND * 6, function(){
      this.game.state.start("menu");   
     }.bind(this), this);
-    var t = this.siGame.addGuiText(this.game.width/2, 50, "Game Over");
-    t.alpha = 0;
-    t.anchor.setTo(0.5,1);
-    this.game.add.tween(t).to( { alpha: 1}, 2000, Phaser.Easing.Linear.None, true);
+    if(victory)
+    {
+        var t = this.siGame.addGuiText(this.game.width/2, 50, "WELL DONE EARTHLING");
+        t.anchor.setTo(0.5,1);
+        t.alpha = 0;
+        var tween1 = this.game.add.tween(t).to( { alpha: 1}, 2000, Phaser.Easing.Linear.None, false);
+        
+        var t2 = this.siGame.addGuiText(this.game.width/2, 60, "THIS TIME YOU WIN");
+        t2.anchor.setTo(0.5,1);
+        t2.alpha = 0;
+        var tween2 = this.game.add.tween(t2).to( { alpha: 1}, 2000, Phaser.Easing.Linear.None, false);
+        
+        tween1.chain(tween2);
+        tween1.start();
+    }
+    else
+    {
+        this.player.explode();
+        var t = this.siGame.addGuiText(this.game.width/2, 50, "Game Over");
+        t.anchor.setTo(0.5,1);
+        this.game.add.tween(t).from( { alpha: 0}, 2000, Phaser.Easing.Linear.None, true);
+        for(var i = 0; i < this.walls.children.length; i++){
+            var wall = this.walls.children[i];
+            wall.kill();
+        }
+        for(var i = 0; i < this.enemies.children.length; i++){
+            var enemy = this.enemies.children[i];
+            enemy.body.velocity.y = 40;
+        }
+    }
+    
+    
 }
 
 GameplayState.prototype.createGui = function(){
@@ -49,7 +85,7 @@ GameplayState.prototype.createGui = function(){
     
 	for(var i = 0; i < this.lifes; i++){
         var x = 30 + (16 * i);
-        var y = game.height - 2);
+        var y = game.height - 2;
 		var lifeSprite = game.add.sprite(x, y, 'player');
 		lifeSprite.tint = "0x00ff00";
 		lifeSprite.anchor.setTo(0,1);
@@ -62,6 +98,8 @@ GameplayState.prototype.createGui = function(){
 GameplayState.prototype.createEnemies = function(){
     var game = this.game;
     var siGame = this.siGame;
+    
+    this.spaceship = new Spaceship(this);
     
     for(var i = 0; i < 5; i++){
 		var enemyType = 0;
@@ -103,6 +141,9 @@ GameplayState.prototype.createWalls = function(){
 GameplayState.prototype.create = function(){
     var game = this.game;
     var siGame = this.siGame;
+    siGame.score = 0;
+    
+    this.isGameOver = false;
     
 	this.lifes = 3;
     this.lifeSprites = [];
@@ -137,5 +178,11 @@ GameplayState.prototype.update = function(){
 	this.game.physics.arcade.overlap(this.enemies, this.playerShots,  this.hitEnemy.bind(this), null, this);
 	this.game.physics.arcade.overlap(this.walls, this.playerShots,  this.hitWall.bind(this), null, this);
     this.game.physics.arcade.overlap(this.walls, this.enemyShots,  this.hitWall.bind(this), null, this);
+    this.game.physics.arcade.overlap(this.spaceship, this.playerShots,  this.hitEnemy.bind(this), null, this);
 	this.game.physics.arcade.overlap(this.player, this.enemyShots, this.hitPlayer.bind(this), null, this);
+    
+    if(this.enemies.countLiving() <= 0 && !this.isGameOver)
+    {
+        this.gameOver(true);
+    }
 }

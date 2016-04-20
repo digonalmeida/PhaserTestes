@@ -1,6 +1,7 @@
 function MenuState(siGame){
 	this.siGame = siGame;
 	this.game = siGame.game;
+    this.instructions = null;
 }
 MenuState.prototype.preload = function(){
 	this.game.load.atlasJSONHash('enemy', 'enemySprites.png', 'enemySprites.json');
@@ -10,8 +11,11 @@ MenuState.prototype.scoreInfo = function(){
 	
 }
 MenuState.prototype.create = function(){
+    
 	this.siGame.createGui();
 	var title = this.siGame.addGuiText(this.game.width/2, 40, "THE SPACE INVADERS");
+    title.desiredText = title.text;
+
 	title.anchor.setTo(0.5,0);
 	title.fontSize = 12;
 	var presents = this.siGame.addGuiText(this.game.width/2, 55, "PRESENTS");
@@ -35,6 +39,7 @@ MenuState.prototype.create = function(){
 	console.log("teste");
 	var instructions = this.siGame.addGuiText(10, this.game.height-30, "Press [SPACEBAR] to start");
 	instructions.fontSize = 12;
+
 }
 
 MenuState.prototype.update = function(){

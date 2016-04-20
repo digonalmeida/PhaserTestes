@@ -42,7 +42,10 @@ Enemy.prototype.updateShot = function(){
 }
 
 Enemy.prototype.update = function(){
-    
+    if(this.gameState.isGameOver)
+    {
+        return;   
+    }
 	if(!this.alive){
 		return;
 	}
@@ -60,8 +63,6 @@ Enemy.prototype.update = function(){
 		  this.setGroupDirection(1);
         }
     }
-	
-	//this.x += (this.speed * this.dir);
 
 	if(this.game.input.keyboard.isDown(Phaser.Keyboard.K)){
 		this.explode();
@@ -70,7 +71,8 @@ Enemy.prototype.update = function(){
 
 Enemy.prototype.setGroupDirection = function(dir){
 
-    this.gameState.enemies.y += 5;
+    //this.gameState.enemies.y += 5;
+    var gameOver = false;
     
     for(var i = 0; i < this.gameState.enemies.children.length; i++){
         var enemy = this.gameState.enemies.children[i];
@@ -78,7 +80,16 @@ Enemy.prototype.setGroupDirection = function(dir){
         enemy.animations.currentAnim.speed += 0.5;
         enemy.speed += 1;
         enemy.body.velocity.x = enemy.speed * enemy.dir;
+        enemy.y += 5;
+        if(enemy.y >= this.game.height - 60)
+        {
+            if(enemy.isAlive){
+                gameOver = true;
+            }
+        }
     }
+    if(gameOver)
+        this.gameState.gameOver(false);
 }
 
 Enemy.prototype.explode = function(){
