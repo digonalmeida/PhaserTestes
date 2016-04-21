@@ -20,7 +20,7 @@ function Ex2Sprite(game, color){
     this.x = Math.random() * (this.game.width);
     this.y = Math.random() * (this.game.height);
     
-    var maxVelocity = 50;//pra cada eixo
+    var maxVelocity = 25;//pra cada eixo
     this.body.velocity.x = (Math.random() * (maxVelocity*2)) - maxVelocity;
     this.body.velocity.y = (Math.random() * (maxVelocity*2)) - maxVelocity; 
     
@@ -30,7 +30,7 @@ function Ex2Sprite(game, color){
 
     this.animations.add("fly",[0,1], 2, true);
     this.animations.play("fly", null, 100, true);
-
+    this.explosion = this.game.add.audio("explosion");
     this.exploded = false;
 }
 
@@ -76,7 +76,7 @@ Ex2Sprite.prototype.onDragStop = function(){
 }
 
 Ex2Sprite.prototype.explode = function(){
-
+    this.explosion.play();
     if(this.exploded){
         return;
     }

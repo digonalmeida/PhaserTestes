@@ -22,6 +22,8 @@ function Player(state){
     
     this.respawnTimeout = 1;
     this.invencibleTimeout = 1;
+    this.shotSound = this.game.add.audio("playerShot");
+    this.explosionSound = this.game.add.audio("playerExplosion");
 }
 
 Player.prototype = Object.create(Phaser.Sprite.prototype);
@@ -71,6 +73,7 @@ Player.prototype.update = function(){
 
 Player.prototype.explode = function(){
 	if(!this.exploded){
+        this.explosionSound.play();
 		this.exploded = true;
 		this.animations.play('exploding', null, false, true);
 	}
@@ -80,6 +83,7 @@ Player.prototype.shoot = function(){
 	if(this.shotTimeout > 0){
 		return;
 	}
+    this.shotSound.play();
 	var shot = new Shot(this.gameState, 'shot');
 	shot.x = this.x + (this.width/2);
 	shot.y = this.y;
