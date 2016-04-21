@@ -1,0 +1,84 @@
+Importacao de sprite:
+Exemplo:
+preload: function(){
+	game.load.image('player', 'img/player.png');
+}
+
+create: function(){
+	player = game.add.sprite(100,100,"player");
+}
+
+Importacao de spritesheet:
+
+preload: function(){
+	game.load.spritesheet("player", 'img/playersprites.png', 32, 32);
+}
+
+create: function(){
+	player = game.add.sprite(100,100,"player");
+	player.animations.add("idle", [0], 5, true, false);
+	player.animations.add("walking", [0,1,2,1], 5, true, false);
+	player.animations.add("death", [0,3,4], 4, false, true);
+}
+
+update: function(){
+	if(Math.abs(player.body.velocity.x)){
+		player.animations.play("walking");
+	}
+
+	if(player.life <= 0){
+		player.animations.play("death");
+	}
+}
+
+
+Importacao de atlas:
+
+https://www.codeandweb.com/texturepacker (Free/Pro version)
+https://www.leshylabs.com/apps/sstool/ (Online free)
+
+as ferrementas geram um atlas (Mapa de tiles), e um json/xml descrevendo o nome e a posicao de cada sprite.
+
+Exemplo:
+
+preload: function(){
+	game.load.atlasJSONHash("player", "img/playerAtlas.png", "img/playerAtlas.json");
+}
+
+create: function(){
+	player = game.add.sprite(0,0,"player");
+	player.animations.add("idle", ["idle_1", "idle_2", "idle_3"], 5, true);
+	player.animations.add("death", ["death_1", "death_2", "death_3"], 5, false, true);
+}
+
+update: function(){
+	if(player.life <= 0){
+		player.animations.play("death");
+	}
+}
+
+Creature:
+Creature eh um objeto criado a partir de uma com a ferramenta Creature Automated Animation Tool
+
+Usado em jogos para html5 com WebGL habilitado. Nao funciona em jogos em modo canvas.
+
+As bibliotecas da creature nao sao inclusas por padrao. eh preciso criar uma build que inclua ela.
+
+video https://www.youtube.com/watch?v=em_T76M2wRE
+
+A ferramenta exporta as informacoes de bones e anima;oes em formato json junto com a textura em formato png.
+
+Para carregar um gameobject da ferramenta:
+
+preload: function(){
+	game.load.image('sky', 'assets/skies/deepblue.png');
+    game.load.image('dragonTexture', 'assets/creature/dragon.png');
+    game.load.json('dragonMesh', 'assets/creature/dragon.json');
+}
+
+create: function(){
+	var dragon = game.add.creature(100,100,"dragonTexture", "dragonMesh");
+	dragon.play(true);//toca a animacao. true = loop
+}
+
+Exemplo: http://phaser.io/examples/v2/animation/creature-dragon

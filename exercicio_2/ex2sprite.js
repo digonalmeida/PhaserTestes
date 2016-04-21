@@ -27,6 +27,11 @@ function Ex2Sprite(game, color){
     this.lastVelocity = 0;
     this.lastPositions = [];
     this.maxPositions = 3;
+
+    this.animations.add("fly",[0,1], 2, true);
+    this.animations.play("fly", null, 100, true);
+
+    this.exploded = false;
 }
 
 Ex2Sprite.prototype = Object.create(Phaser.Sprite.prototype);
@@ -45,6 +50,7 @@ Ex2Sprite.prototype.update = function(){
         //should be = sqrt( ( velocity.x ^ 2 ) + ( velocity.y ^2 ) )
         //but i think abs(x) + abs(y) is good enough in this situation
         var totalVelocity = Math.abs(this.body.velocity.x) + Math.abs(this.body.velocity.y);
+        this.animations.currentAnim.speed = totalVelocity;
         
         if(totalVelocity <= 0.5){ // if it stops moving, it'll start growing!
             this.scale.x *= 1.005;
@@ -70,6 +76,11 @@ Ex2Sprite.prototype.onDragStop = function(){
 }
 
 Ex2Sprite.prototype.explode = function(){
+
+    if(this.exploded){
+        return;
+    }
+    this.exploded = true; 
     
     var tween = this.game.add.tween(this).to({width: 30,
                                         height: 16,
