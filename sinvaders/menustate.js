@@ -2,6 +2,7 @@ function MenuState(siGame){
 	this.siGame = siGame;
 	this.game = siGame.game;
     this.instructions = null;
+    this.loadingText = null;
 }
 MenuState.prototype.preload = function(){
     
@@ -42,6 +43,16 @@ MenuState.prototype.create = function(){
 	var instructions = this.siGame.addGuiText(20, this.game.height-60, "Press [SPACEBAR] to start");
 	instructions.fontSize = 24;
 
+	this.game.load.onLoadStart.add(this.startLoad, this);
+	this.game.load.onLoadComplete.add(this.endLoad, this);
+
+}
+
+MenuState.prototype.startLoad = function(){
+    this.loadingText = this.game.add.text(0,0,"Loading...", {fill:"white"});
+}
+MenuState.prototype.endLoad = function(){
+    this.loadingText.destroy();
 }
 
 MenuState.prototype.update = function(){

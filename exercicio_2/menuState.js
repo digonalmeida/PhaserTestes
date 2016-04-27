@@ -1,5 +1,6 @@
 function MenuState(game){
 	this.game = game;
+    this.loadingText = null;
 }
 MenuState.prototype.preload = function(){
     this.game.load.spritesheet("squid", "squid.png", 28, 16);
@@ -61,6 +62,18 @@ MenuState.prototype.create = function(){
 	game.input.onDown.add(function(){
 		game.state.start("gameplay");
 	});
+
+    
+    this.game.load.onLoadStart.add(this.startLoad, this);
+    this.game.load.onLoadComplete.add(this.endLoad, this);
+
+}
+
+MenuState.prototype.startLoad = function(){
+    this.loadingText = this.game.add.text(0,0,"Loading...", {fill:"white"});
+}
+MenuState.prototype.endLoad = function(){
+    this.loadingText.destroy();
 }
 
 MenuState.prototype.update = function(){
