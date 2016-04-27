@@ -1,7 +1,7 @@
 function SpaceInvaders(){
 	this.game = null;
-	this.width = 210;
-	this.height = 250;
+	this.width = 420;
+	this.height = 500;
 	
 	this.init();
     
@@ -20,6 +20,7 @@ SpaceInvaders.prototype.init = function(){
 								{
 									create: this.create.bind(this),
 								} );
+    
 }
 
 SpaceInvaders.prototype.preload = function(){
@@ -32,7 +33,7 @@ SpaceInvaders.prototype.addGuiText = function(x,y, text){
     var t = this.game.add.text(x,y, text);
     t.font = 'Arial Black';
     t.fill = 'white'
-    t.fontSize = 9;
+    t.fontSize = 18;
     t.textAlign = 'center';
     //t.anchor.setTo(0.5,0);
     t.x = Math.round(t.x);
@@ -51,14 +52,15 @@ SpaceInvaders.prototype.addScore = function(score){
 SpaceInvaders.prototype.createGui = function(){
 	var game = this.game;
     this.addGuiText(0,0, "SCORE             HI-SCORE");
-    this.scoreText = this.addGuiText(0,10, "0000");
-    this.highScoreText = this.addGuiText(75, 10, this.getHighScore());
-    this.addGuiText(140,this.height-12, "CREDIT 04")
-    var graphics = game.add.graphics(0, this.height-12);
-    graphics.lineStyle(2, 0x33FF00);
-    graphics.lineTo(300,0);
+    this.scoreText = this.addGuiText(0,20, "0000");
+    this.highScoreText = this.addGuiText(150, 20, this.getHighScore());
+    this.addGuiText(280,this.height-24, "CREDIT 04")
+    var graphics = game.add.graphics(0, this.height-24);
+    graphics.lineStyle(4, 0x33FF00);
+    graphics.lineTo(600,0);
 }
 SpaceInvaders.prototype.create = function(){
+    this.game.canvas.id="canvas_game";
 	this.game.state.add('menu', new MenuState(this));
 	this.game.state.add('game', new GameplayState(this));
 	this.game.state.start('menu');

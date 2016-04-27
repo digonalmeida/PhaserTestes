@@ -1,0 +1,15 @@
+Jogos e codigo fonte atualizado diponivel em: 
+http://digonalmeida.github.io/phaserTests
+
+Por Rodrigo Nietiedt de Almeida
+rodrigonietiedt@gmail.com
+
+Fonte das sprites: 
+http://www.spriters-resource.com/arcade/spaceinv/sheet/8593/ 
+
+Efeitos sonoros:
+http://www.classicgaming.cc/classics/space-invaders/sounds
+
+Música: 05_Earth.mp3
+http://downloads.khinsider.com/game-soundtracks/album/space-invaders-gbc-gb-
+

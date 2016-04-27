@@ -1,2 +1,3 @@
-
-var game = new SpaceInvaders();
+window.onload = function() {
+   var game = new SpaceInvaders(); 
+}
