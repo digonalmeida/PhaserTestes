@@ -23,7 +23,7 @@ function GameplayState(game){
 }
 
 GameplayState.prototype.preload = function(){
-	this.game.load.spritesheet("squid", "squid.png", 14,8);
+	this.game.load.spritesheet("squid", "squid.png", 28, 16);
     this.game.load.audio("music", "earth.mp3");
     this.game.load.audio("spawn", "invaderkilled.wav");
     this.game.load.audio("explosion", "explosion.wav");

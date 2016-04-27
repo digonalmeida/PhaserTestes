@@ -50,7 +50,7 @@ Ex2Sprite.prototype.update = function(){
         //should be = sqrt( ( velocity.x ^ 2 ) + ( velocity.y ^2 ) )
         //but i think abs(x) + abs(y) is good enough in this situation
         var totalVelocity = Math.abs(this.body.velocity.x) + Math.abs(this.body.velocity.y);
-        this.animations.currentAnim.speed = totalVelocity;
+        this.animations.currentAnim.speed = totalVelocity* 0.03;
         
         if(totalVelocity <= 0.5){ // if it stops moving, it'll start growing!
             this.scale.x *= 1.005;

@@ -5,8 +5,8 @@ function create(){
     return;   
 }
 
-var ex2Game = new Phaser.Game(300,
-                           200,
+var ex2Game = new Phaser.Game(600,
+                           400,
                            Phaser.AUTO,
                            'phaser-ex2',
                            {create: create});
