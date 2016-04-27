@@ -20,6 +20,7 @@ SpaceInvaders.prototype.init = function(){
 								{
 									create: this.create.bind(this),
 								} );
+    
 }
 
 SpaceInvaders.prototype.preload = function(){
@@ -59,6 +60,7 @@ SpaceInvaders.prototype.createGui = function(){
     graphics.lineTo(300,0);
 }
 SpaceInvaders.prototype.create = function(){
+    this.game.canvas.id="canvas_game";
 	this.game.state.add('menu', new MenuState(this));
 	this.game.state.add('game', new GameplayState(this));
 	this.game.state.start('menu');

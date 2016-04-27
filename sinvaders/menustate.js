@@ -4,12 +4,14 @@ function MenuState(siGame){
     this.instructions = null;
 }
 MenuState.prototype.preload = function(){
+    
 	this.game.load.atlasJSONHash('enemy', 'enemySprites.png', 'enemySprites.json');
 }
 
 MenuState.prototype.scoreInfo = function(){
 	
 }
+
 MenuState.prototype.create = function(){
     
 	this.siGame.createGui();
