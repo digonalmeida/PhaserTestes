@@ -5,6 +5,8 @@ function Ex2Sprite(game, color){
     
     this.anchor.setTo(0.5,0.5);
     this.tint = color;
+
+    this.scale.setTo(2,2);
     
     this.game.physics.enable(this, Phaser.Physics.ARCADE);
     
@@ -82,10 +84,11 @@ Ex2Sprite.prototype.explode = function(){
     }
     this.exploded = true; 
     
-    var tween = this.game.add.tween(this).to({width: 30,
-                                        height: 16,
-                                        alpha: 0}, 
+    var tween = this.game.add.tween(this.scale).to({x:3,
+                                        y:3}, 
                                       400);
+                                                //null = linear
+    this.game.add.tween(this).to({alpha:0}, 400, null, true);
     
     tween.onComplete.add(function(){
         this.kill(); 
