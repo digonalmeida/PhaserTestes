@@ -48,10 +48,10 @@ GameplayState.prototype.create = function(){
 
     this.game.input.keyboard.onDownCallback = this.onKeyDown;
 
-    var style = { font: "20px Arial", fill: "#ffffff"};
+    var style = { font: "12px Arial", fill: "#ffffff"};
 
 	this.scoreText = this.game.add.text( 0,0, "Score: ", style);
-	this.highScoreText = this.game.add.text( 0, 20, "HighScore: ", style);
+	this.highScoreText = this.game.add.text( 0, 15, "HighScore: ", style);
     this.game.time.events.loop(3* Phaser.Timer.SECOND, this.spawnSprites, this);
     
 }

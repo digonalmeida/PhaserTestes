@@ -1,10 +1,10 @@
 function Spaceship(gameState){
     GameStateObject.call(this, gameState, 'enemy');
     this.enablePhysics();
-    this.speed = 50;
+    this.speed = 150;
     this.body.velocity.x = this.speed;
-    this.x = -10;
-    this.y = 30;
+    this.x = -20;
+    this.y = 60;
     
     this.animations.add("exploding", ["explosion"], 10, false, true);
     this.animations.add("fly", ["spaceship"], 2, true);

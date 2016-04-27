@@ -4,9 +4,9 @@ function Enemy(state, enemyType){
     this.enablePhysics();
 
     this.enemyType = enemyType;
-    this.x = 10;
-    this.y = 100;
-	this.speed = 5;
+    this.x = 20;
+    this.y = 200;
+	this.speed = 10;
     this.exploded = false;
 	this.dir = 1;
     this.shotTimeout = 0.5;
@@ -81,10 +81,10 @@ Enemy.prototype.setGroupDirection = function(dir){
         var enemy = this.gameState.enemies.children[i];
         enemy.dir = dir;
         enemy.animations.currentAnim.speed += 0.5;
-        enemy.speed += 1;
+        enemy.speed += 2;
         enemy.body.velocity.x = enemy.speed * enemy.dir;
         enemy.y += 5;
-        if(enemy.y >= this.game.height - 60)
+        if(enemy.y >= this.game.height - 120)
         {
             if(enemy.alive){
                 gameOver = true;
@@ -108,7 +108,7 @@ Enemy.prototype.shoot = function(){
     this.shotSound.play();
     shot.x = this.x + (this.width /2);
     shot.y = this.y;
-    shot.body.velocity.y = 100;
+    shot.body.velocity.y = 200;
     this.gameState.enemyShots.add(shot);
 }
 Enemy.getAnimArray = function (enemyType) {
