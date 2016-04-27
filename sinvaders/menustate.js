@@ -48,4 +48,7 @@ MenuState.prototype.update = function(){
 	if(this.game.input.keyboard.isDown(Phaser.Keyboard.SPACEBAR)){
 		this.game.state.start('game');
 	}
+	if(this.game.input.activePointer.isDown){
+		this.game.state.start('game');
+	}
 }

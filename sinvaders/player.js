@@ -69,6 +69,20 @@ Player.prototype.update = function(){
 		this.shoot();
 	}
 
+	if(!game.device.desktop){
+		this.shoot();
+	}
+
+	if(game.input.activePointer.isDown){
+		if(game.input.activePointer.position.x > game.width/2){
+			this.x += this.speed;
+		}
+		else
+		{
+			this.x -= this.speed;
+		}
+	}
+
 }
 
 Player.prototype.explode = function(){
