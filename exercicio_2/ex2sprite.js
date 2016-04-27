@@ -20,13 +20,18 @@ function Ex2Sprite(game, color){
     this.x = Math.random() * (this.game.width);
     this.y = Math.random() * (this.game.height);
     
-    var maxVelocity = 50;//pra cada eixo
+    var maxVelocity = 25;//pra cada eixo
     this.body.velocity.x = (Math.random() * (maxVelocity*2)) - maxVelocity;
     this.body.velocity.y = (Math.random() * (maxVelocity*2)) - maxVelocity; 
     
     this.lastVelocity = 0;
     this.lastPositions = [];
     this.maxPositions = 3;
+
+    this.animations.add("fly",[0,1], 2, true);
+    this.animations.play("fly", null, 100, true);
+    this.explosion = this.game.add.audio("explosion");
+    this.exploded = false;
 }
 
 Ex2Sprite.prototype = Object.create(Phaser.Sprite.prototype);
@@ -45,6 +50,7 @@ Ex2Sprite.prototype.update = function(){
         //should be = sqrt( ( velocity.x ^ 2 ) + ( velocity.y ^2 ) )
         //but i think abs(x) + abs(y) is good enough in this situation
         var totalVelocity = Math.abs(this.body.velocity.x) + Math.abs(this.body.velocity.y);
+        this.animations.currentAnim.speed = totalVelocity* 0.03;
         
         if(totalVelocity <= 0.5){ // if it stops moving, it'll start growing!
             this.scale.x *= 1.005;
@@ -70,6 +76,11 @@ Ex2Sprite.prototype.onDragStop = function(){
 }
 
 Ex2Sprite.prototype.explode = function(){
+    this.explosion.play();
+    if(this.exploded){
+        return;
+    }
+    this.exploded = true; 
     
     var tween = this.game.add.tween(this).to({width: 30,
                                         height: 16,

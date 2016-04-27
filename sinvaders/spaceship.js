@@ -9,6 +9,7 @@ function Spaceship(gameState){
     this.animations.add("exploding", ["explosion"], 10, false, true);
     this.animations.add("fly", ["spaceship"], 2, true);
     this.animations.play("fly");
+    this.explosionSound = this.game.add.audio("enemyExplosion");
     
     
 }
@@ -29,6 +30,7 @@ Spaceship.prototype.update = function()
 Spaceship.prototype.explode = function()
 {
     console.log("explode");
+    this.explosionSound.play();
     this.animations.play("exploding", null, false, true);
     this.siGame.addScore(Enemy.getHitScore(Enemy.EnemyType.SPACESHIP));
 }

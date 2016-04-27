@@ -19,6 +19,9 @@ function Enemy(state, enemyType){
     this.gameState.enemies.add(this);
     
     this.body.velocity.x = this.speed * this.dir;
+    
+    this.shotSound = this.game.add.audio("enemyShot");
+    this.explosionSound = this.game.add.audio("enemyExplosion");
 }
 GameStateObject.extend(Enemy);
 
@@ -83,7 +86,7 @@ Enemy.prototype.setGroupDirection = function(dir){
         enemy.y += 5;
         if(enemy.y >= this.game.height - 60)
         {
-            if(enemy.isAlive){
+            if(enemy.alive){
                 gameOver = true;
             }
         }
@@ -94,7 +97,7 @@ Enemy.prototype.setGroupDirection = function(dir){
 
 Enemy.prototype.explode = function(){
 	if(!this.exploded){
-         console.log("here");
+        this.explosionSound.play();
 		this.exploded = true;
 		this.animations.play("exploding", null, false, true);
 	}
@@ -102,6 +105,7 @@ Enemy.prototype.explode = function(){
 
 Enemy.prototype.shoot = function(){
     var shot = new Shot(this.gameState, 'enemyShot');
+    this.shotSound.play();
     shot.x = this.x + (this.width /2);
     shot.y = this.y;
     shot.body.velocity.y = 100;

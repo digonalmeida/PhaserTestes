@@ -20,6 +20,15 @@ GameplayState.prototype.preload = function(){
 	this.game.load.spritesheet('enemyShot', 'enemyShot.png',4, 9);
     this.game.load.image('wall', 'wall.png');
 	this.game.load.atlasJSONHash('enemy', 'enemySprites.png', 'enemySprites.json');
+    
+    this.game.load.audio("music", "earth.mp3");
+    this.game.load.audio("enemyExplosion", "explosion.wav");
+    this.game.load.audio("playerExplosion", "explosion.wav");
+    this.game.load.audio("enemyShot", "enemyShot.wav");
+    this.game.load.audio("playerShot", "playerShot.wav");
+    this.game.load.audio("ufoExplosion","ufo_highpitch.wav");
+    this.game.load.audio("ufo", "ufo_lowpitch.wav")
+     
 }
 
 GameplayState.prototype.removeLife = function(){
@@ -144,6 +153,9 @@ GameplayState.prototype.create = function(){
     siGame.score = 0;
     
     this.isGameOver = false;
+    
+    this.music = this.game.add.audio("music");
+    this.music.play();
     
 	this.lifes = 3;
     this.lifeSprites = [];
