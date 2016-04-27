@@ -26,8 +26,6 @@ GameplayState.prototype.preload = function(){
     this.game.load.audio("playerExplosion", "explosion.wav");
     this.game.load.audio("enemyShot", "enemyShot.wav");
     this.game.load.audio("playerShot", "playerShot.wav");
-    this.game.load.audio("ufoExplosion","ufo_highpitch.wav");
-    this.game.load.audio("ufo", "ufo_lowpitch.wav")
      
 }
 
